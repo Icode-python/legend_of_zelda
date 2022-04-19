@@ -30,6 +30,10 @@ void drawEntity(entity e){
     for (int y=0;y<e.length;y++){
         for (int x=0;x<e.width;x++){
             glColor3f(e.sprite[y*(e.length+e.textureCoords[e.frame][0])+x][0],e.sprite[y*(e.length+e.textureCoords[e.frame][0])+x][1],e.sprite[y*(e.length+e.textureCoords[e.frame][0])+x][2]);
+            glPointSize(1);
+            glBegin(GL_POINTS);
+            glVertex2i(e.x+x,e.y+y);
+            glEnd();
         }
     }
 }

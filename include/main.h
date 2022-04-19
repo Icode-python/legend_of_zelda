@@ -3,6 +3,7 @@
 #include <string.h>
 
 extern long double wall[2][64*64][3];
+long double playerTextureCoords[8][2];
 extern long double playerSprite[256*32][3];
 extern long double red_moblin[4][2][32*32][3];
 extern int map[];
