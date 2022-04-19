@@ -85,12 +85,12 @@ void display(){
 
 
 void buttons(unsigned char key, int x, int y){
-    if(key=='a') {player.dx=-player.speed;player.dy=0;player.state=2;player.standing=0;}
-    if(key=='d') {player.dx=player.speed;player.dy=0;player.state=3;player.standing=0;}
-    if(key=='w') {player.dy=-player.speed;player.dx=0;player.state=1;player.standing=0;}
-    if(key=='s') {player.dy=player.speed;player.dx=0;player.state=0;player.standing=0;}
+    if(key=='a') {player.dx=-player.speed;player.dy=0;player.state=3;player.standing=0;}
+    if(key=='d') {player.dx=player.speed;player.dy=0;player.state=4;player.standing=0;}
+    if(key=='w') {player.dy=-player.speed;player.dx=0;player.state=2;player.standing=0;}
+    if(key=='s') {player.dy=player.speed;player.dx=0;player.state=1;player.standing=0;}
     if(key==32) {
-        if(weapon.state==0){weapon.dx=sDir[player.state][0];weapon.dy=sDir[player.state][1];weapon.state=1;}
+        if(weapon.state==0){weapon.dx=sDir[player.state-1][0];weapon.dy=sDir[player.state-1][1];weapon.state=1;}
     }
     if (key=='a' || key=='d' || key=='w' || key=='s'){
         int c = staticCollision(map,player.x+player.dx,player.y+player.dy,player.width,player.length);

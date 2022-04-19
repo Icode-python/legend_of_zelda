@@ -29,7 +29,7 @@ void drawWall(int wallSprite, int x,int y,int xo,int yo, int mapS, int offset){
 void drawEntity(entity e){
     for (int y=0;y<e.length;y++){
         for (int x=0;x<e.width;x++){
-            
+            glColor3f(e.sprite[y*(e.length+e.textureCoords[e.frame][0])+x][0],e.sprite[y*(e.length+e.textureCoords[e.frame][0])+x][1],e.sprite[y*(e.length+e.textureCoords[e.frame][0])+x][2]);
         }
     }
 }
