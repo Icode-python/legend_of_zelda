@@ -47,6 +47,13 @@ void updateWeapon(){
     }
 }
 
+void timer(int id){
+    if(player.standing==0){
+        if(player.frame==0){player.frame=1;}
+        else{player.frame=0;}
+    }
+}
+
 void update_enemies(){
     for(int e=0;e<2;e++){
         int c = staticCollision(map,enemies[e].x+enemies[e].dx,enemies[e].y+enemies[e].dy,enemies[e].width,enemies[e].length);
@@ -56,11 +63,9 @@ void update_enemies(){
 }
 
 void updatePlayer(){
-    if(player.frame==1){player.frame=0;} else if (player.standing!=1){player.frame++;}
     drawEntity(player);
     for(int e=0;e<2;e++){
         int c = dynamicCollision(enemies[e].x,enemies[e].x,player.x,player.width,enemies[e].y,enemies[e].length,player.y,player.length);
-
     }
     player.standing=1;
 }
@@ -76,18 +81,19 @@ void drawMap(){
 
 void display(){
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glutTimerFunc(100.0,timer,0);
     drawMap();
     updateWeapon();
     //update_enemies();
-    //updatePlayer();
+    updatePlayer();
     glutSwapBuffers();
 }
 
 
 void buttons(unsigned char key, int x, int y){
-    if(key=='a') {player.dx=-player.speed;player.dy=0;player.state=2;player.standing=0;}
-    if(key=='d') {player.dx=player.speed;player.dy=0;player.state=3;player.standing=0;}
-    if(key=='w') {player.dy=-player.speed;player.dx=0;player.state=1;player.standing=0;}
+    if(key=='a') {player.dx=-player.speed;player.dy=0;player.state=3;player.standing=0;}
+    if(key=='d') {player.dx=player.speed;player.dy=0;player.state=1;player.standing=0;}
+    if(key=='w') {player.dy=-player.speed;player.dx=0;player.state=2;player.standing=0;}
     if(key=='s') {player.dy=player.speed;player.dx=0;player.state=0;player.standing=0;}
     if(key==32) {
         if(weapon.state==0){weapon.dx=sDir[player.state][0];weapon.dy=sDir[player.state][1];weapon.state=1;}
