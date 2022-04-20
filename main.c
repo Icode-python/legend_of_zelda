@@ -80,7 +80,7 @@ void drawMap(){
 
 void display(){
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glutTimerFunc(100.0,timer,0);
+    //glutTimerFunc(1000.0,timer,0);
     drawMap();
     updateWeapon();
     //update_enemies();
