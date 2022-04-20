@@ -1,7 +1,9 @@
+from cgi import print_directory
 from PIL import Image
-image = Image.open('sprites/link_sheet.png')
+image = Image.open('sprites/sprite_atlas.png')
 width, height = image.size
 pixels = image.load()
+print(width,height)
 
 # Check if has alpha, to avoid "too many values to unpack" error
 has_alpha = len(pixels[0,0]) == 4
@@ -15,13 +17,13 @@ for y in range(height):
         if has_alpha:
             r, g, b, a = pixels[x,y]
             if a < 255:
-                array[y][x] = (2,2,2)
+                array[y][x] = {2,3,4}
             else:
-                array[y][x] = (r/255,g/255,b/255)
+                array[y][x] = {r/255,g/255,b/255}
         else:
             r, g, b = pixels[x,y]
             array[y][x] = (r/255,g/255,b/255) # Map values from range 0-255 to 0-1
-
+            
 file = open("l", "w+")
 for x in array:
     file.write(str(x)+ '\n')

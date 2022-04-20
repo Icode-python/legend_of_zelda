@@ -7,7 +7,7 @@
 entity weapon;
 entity enemies[2];
 entity player;
-int mapSizeX=16,mapSizeY=8,mapS=64,offset=0;
+int mapSizeX=16,mapSizeY=11,mapS=64,offset=0;
 int sDir[4][2] = {{0,16},{0,-16},{-16,0},{16,0}};
 
 int staticCollision(int map[], int x1, int y1, int width, int length){
@@ -67,7 +67,6 @@ void updatePlayer(){
     for(int e=0;e<2;e++){
         int c = dynamicCollision(enemies[e].x,enemies[e].x,player.x,player.width,enemies[e].y,enemies[e].length,player.y,player.length);
     }
-    player.standing=1;
 }
 
 void drawMap(){
@@ -101,6 +100,7 @@ void buttons(unsigned char key, int x, int y){
     if (key=='a' || key=='d' || key=='w' || key=='s'){
         int c = staticCollision(map,player.x+player.dx,player.y+player.dy,player.width,player.length);
         if(c == 0){player.x+=player.dx;player.y+=player.dy;}
+        else{player.frame=0;}
     }
     glutPostRedisplay();
 }
@@ -115,7 +115,6 @@ void readMap(){
                 enemies[count].x = x*mapS;enemies[count].y = y*mapS;
                 enemies[count].length=32;enemies[count].width=32;
                 enemies[count].state = 0;enemies[count].frame = 1;
-                memcpy(enemies[count].sprite, red_moblin, sizeof(enemies[count].sprite));
                 count++;
             }
         }
@@ -124,20 +123,24 @@ void readMap(){
 
 void init(){
     glClearColor(0.3,0.3,0.3,0);
-    gluOrtho2D(0,1024,512,0);
+    gluOrtho2D(0,1024,704,0);
     //readMap();
     player.x = 5*mapS; player.y = 5*mapS;
     weapon.x=player.x; weapon.y=player.y; weapon.state=0;player.width=32;player.length=32;
     player.speed = 4;player.state=0;player.frame=0;player.standing=1;
     memcpy(player.textureCoords, playerTextureCoords, sizeof(player.textureCoords));
-    memcpy(player.sprite, playerSprite, sizeof(player.sprite));
+}
+
+void reshape(int width, int height){
+    glutReshapeWindow(1024,704);
 }
 
 int main(int argc, char * argv[]){
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA);
-    glutInitWindowSize(1024, 512);
+    glutInitWindowSize(1024, 704);
     glutCreateWindow("legend of zelda");
+    glutReshapeFunc(reshape);
     init();
     glutDisplayFunc(display);
     glutKeyboardFunc(buttons);

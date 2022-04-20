@@ -29,9 +29,10 @@ void drawWall(int wallSprite, int x,int y,int xo,int yo, int mapS, int offset){
 void drawEntity(entity e){
     for (int y=0;y<e.length;y++){
         for (int x=0;x<e.width;x++){
+            int a = y+e.textureCoords[e.state*2+e.frame][1];
             int z = x+e.textureCoords[e.state*2+e.frame][0];
-            if(e.sprite[y][z][0] <= 1){
-                glColor3f(e.sprite[y][z][0],e.sprite[y][z][1],e.sprite[y][z][2]);
+            if(spriteAtlas[a][z][2] <= 1){
+                glColor3f(spriteAtlas[a][z][0],spriteAtlas[a][z][1],spriteAtlas[a][z][2]);
                 glPointSize(1);
                 glBegin(GL_POINTS);
                 glVertex2i(e.x+x,e.y+y);
@@ -40,20 +41,3 @@ void drawEntity(entity e){
         }
     }
 }
-
-/*
-void drawEntity(entity e){
-    entity entity = e;
-    for (int y=0;y<entity.length;y++){
-        for (int x=0;x<entity.width;x++){
-            if(entity.sprite[entity.state][entity.frame][y*entity.length+x][0] <= 1){
-                glColor3f(entity.sprite[entity.state][entity.frame][y*entity.length+x][0],entity.sprite[entity.state][entity.frame][y*entity.length+x][1],entity.sprite[entity.state][entity.frame][y*entity.length+x][2]);
-                glPointSize(1);
-                glBegin(GL_POINTS);
-                glVertex2i(entity.x+x,entity.y+y);
-                glEnd();
-            }
-        }
-    }
-}
-*/

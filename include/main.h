@@ -4,8 +4,7 @@
 
 extern long double wall[2][64*64][3];
 long double playerTextureCoords[8][2];
-extern long double playerSprite[32][256][3];
-extern long double red_moblin[4][2][32*32][3];
+long double spriteAtlas[96][768][3];
 extern int map[];
 
 typedef struct Entity{
@@ -20,7 +19,6 @@ typedef struct Entity{
     int frame;
     int standing;
     long double textureCoords[8][2];
-    long double sprite[32][256][3];
 } entity;
 
 void drawWeapon();
