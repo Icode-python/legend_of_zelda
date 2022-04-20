@@ -6,9 +6,9 @@
 #include <stdbool.h>
 
 entity weapon;
-entity enemies[2];
+entity enemies[100];
 entity player;
-int mapSizeX=16,mapSizeY=11,mapS=64,offset=0;
+int mapSizeX=16,mapSizeY=11,mapS=64,offset=0,nEnemies=0;
 int sDir[4][2] = {{0,16},{16,0},{0,-16},{-16,0}};
 
 void timer(int id){
@@ -17,8 +17,22 @@ void timer(int id){
     glutTimerFunc(300, timer, 0);
 }
 
+void readMap(){
+    entity enemy;
+    nEnemies = 0;
+    for (int y=0;y<mapSizeY;y++){
+        for (int x=0;x<mapSizeX;x++){
+            if (map[y*mapSizeX+x]==3){
+                enemies[nEnemies]=enemy;
+                enemies[nEnemies] = initEntity(enemies[nEnemies],32,32,x*mapS,y*mapS,4,0,redMoblinTextureCoords);
+                nEnemies++;
+            }
+        }
+    }
+}
+
 void update_enemies(){
-    for(int e=0;e<2;e++){
+    for(int e=0;e<nEnemies;e++){
         int c = staticCollision(map,enemies[e].x+enemies[e].dx,enemies[e].y+enemies[e].dy,enemies[e].width,enemies[e].length);
         if(c == 0){enemies[e].x+=enemies[e].dx;enemies[e].y+=enemies[e].dy;glutPostRedisplay();}
         drawEntity(enemies[e]);
@@ -43,11 +57,10 @@ void drawMap(){
 
 void display(){
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    //glutTimerFunc(500.0,timer,0);
     drawMap();
     weapon = updateWeapon(weapon,player);
-    //update_enemies();
     updatePlayer();
+    update_enemies();
     glutSwapBuffers();
 }
 
@@ -65,7 +78,7 @@ void buttons(unsigned char key, int x, int y){
         player.standing=false;
         int c = staticCollision(map,player.x+player.dx,player.y+player.dy,player.width,player.length);
         if(c == 0){player.x+=player.dx;player.y+=player.dy;}
-        else{player.frame=0;}
+        else{player.frame=0;player.standing=true;}
     }
     glutPostRedisplay();
 }
@@ -73,7 +86,7 @@ void buttons(unsigned char key, int x, int y){
 void init(){
     glClearColor(0.3,0.3,0.3,0);
     gluOrtho2D(0,1024,704,0);
-    //readMap();
+    readMap();
     player = initEntity(player,32,32,5*mapS,5*mapS,4,0,playerTextureCoords);
     weapon = initEntity(weapon,4,4,player.x,player.y,6,0,playerTextureCoords);
     timer(0);

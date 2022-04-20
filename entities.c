@@ -43,7 +43,7 @@ void drawEntity(entity e){
         for (int x=0;x<e.width;x++){
             int a = y+e.textureCoords[e.state*2+e.frame][1];
             int z = x+e.textureCoords[e.state*2+e.frame][0];
-            if(spriteAtlas[a][z][2] <= 1){
+            if(spriteAtlas[a][z][0] <= 1){
                 glColor3f(spriteAtlas[a][z][0],spriteAtlas[a][z][1],spriteAtlas[a][z][2]);
                 glVertex2i(e.x+x,e.y+y);
             }

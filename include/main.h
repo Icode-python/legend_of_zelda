@@ -7,6 +7,8 @@ extern int mapSizeX;extern int mapSizeY;extern int mapS;extern int offset;
 
 extern long double wall[2][64*64][3];
 extern long double playerTextureCoords[8][2];
+extern long double redMoblinTextureCoords[8][2];
+extern long double redOctorockTextureCoords[8][2];
 extern long double spriteAtlas[96][768][3];
 extern int map[];
 
@@ -33,5 +35,4 @@ entity initEntity(entity e, int width, int height, int x, int y, int speed, int 
 //math
 int staticCollision(int map[], int x1, int y1, int width, int length);
 int dynamicCollision(int x1, int width1, int x2, int width2, int y1, int length1, int y2, int length2);
-void readMap(entity enemies[]);
 entity updateWeapon(entity weapon, entity player);

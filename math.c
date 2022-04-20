@@ -26,22 +26,6 @@ int dynamicCollision(int x1, int width1, int x2, int width2, int y1, int length1
 
 }
 
-void readMap(entity enemies[]){
-    entity enemy;
-    int count = 0;
-    for (int y=0;y<mapSizeY;y++){
-        for (int x=0;x<mapSizeX;x++){
-            if (map[y*mapSizeX+x]==3){
-                enemies[count]=enemy;
-                enemies[count].x = x*mapS;enemies[count].y = y*mapS;
-                enemies[count].length=32;enemies[count].width=32;
-                enemies[count].state = 0;enemies[count].frame = true;
-                count++;
-            }
-        }
-    }
-}
-
 entity updateWeapon(entity weapon, entity player){
     if(weapon.state==1){
         int c = staticCollision(map,weapon.x,weapon.y,4,4);
