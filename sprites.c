@@ -3,6 +3,7 @@
 #include <GL/glut.h>
 #include <main.h>
 #include <string.h>
+#include <stdbool.h>
 
 long double playerTextureCoords[8][2] = {
     {0,32},{32,32},{64,32},{96,32},{128,32},{160,32},{192,32},{224,32},
