@@ -17,10 +17,15 @@ void drawWeapon(entity weapon){
 entity initEntity(entity e, int width, int height, int x, int y, int speed, int state, long double textureCoords[8][2]){
     e.x = x; e.y = y;
     e.width=width;e.length=height;
-    e.speed=speed;e.state=state;e.frame=false;e.standing=true;
+    e.speed=speed;e.state=state;e.frame=false;e.standing=false;
     e.frame=false;
     memcpy(e.textureCoords, textureCoords, sizeof(e.textureCoords));
     return e;
+}
+
+entity initWeapon(entity e, entity ep,int width,int height){
+    e.x = ep.x; e.y = ep.y;e.dx,e.dy=0;
+
 }
 
 void drawWall(int wallSprite, int x,int y,int xo,int yo, int mapS, int offset){

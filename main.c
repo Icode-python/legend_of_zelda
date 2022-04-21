@@ -10,11 +10,28 @@ entity enemies[100];
 entity player;
 int mapSizeX=16,mapSizeY=11,mapS=64,offset=0,nEnemies=0;
 int sDir[4][2] = {{0,16},{16,0},{0,-16},{-16,0}};
+int enemyDir[4][2] = {{-1,0},{0,1},{1,0},{0,-1}};
 
-void timer(int id){
+void frameTimer(int id){
+    for(int e=0;e<nEnemies;e++){
+        if(enemies[e].standing==false){enemies[e].frame = !enemies[e].frame;}
+    }
     if(!player.standing){player.frame=!player.frame;}
     player.standing=true;
-    glutTimerFunc(300, timer, 0);
+    glutTimerFunc(300, frameTimer, 0);
+}
+
+void gameEvents(int id){
+    for(int e=0;e<nEnemies;e++){
+        srand(rand());
+        int r = rand()%8;
+        if(r>=4){enemies[e].dx=0;enemies[e].dy=0;enemies[e].standing=true;}
+        else{
+            enemies[e].state = r;enemies[e].standing=false;
+            enemies[e].dx = enemyDir[enemies[e].state][0];enemies[e].dy = enemyDir[enemies[e].state][1];
+        }
+    }
+    glutTimerFunc(1000, gameEvents, 0);
 }
 
 void readMap(){
@@ -23,8 +40,7 @@ void readMap(){
     for (int y=0;y<mapSizeY;y++){
         for (int x=0;x<mapSizeX;x++){
             if (map[y*mapSizeX+x]==3){
-                enemies[nEnemies]=enemy;
-                enemies[nEnemies] = initEntity(enemies[nEnemies],32,32,x*mapS,y*mapS,4,0,redMoblinTextureCoords);
+                enemies[nEnemies] = initEntity(enemy,32,32,x*mapS,y*mapS,4,0,redMoblinTextureCoords);
                 nEnemies++;
             }
         }
@@ -34,7 +50,11 @@ void readMap(){
 void update_enemies(){
     for(int e=0;e<nEnemies;e++){
         int c = staticCollision(map,enemies[e].x+enemies[e].dx,enemies[e].y+enemies[e].dy,enemies[e].width,enemies[e].length);
-        if(c == 0){enemies[e].x+=enemies[e].dx;enemies[e].y+=enemies[e].dy;glutPostRedisplay();}
+        if(c == 0){
+            enemies[e].x+=enemies[e].dx;enemies[e].y+=enemies[e].dy;
+            glutPostRedisplay();
+        }
+        else{enemies[e].standing=true;}
         drawEntity(enemies[e]);
     }
 }
@@ -89,7 +109,8 @@ void init(){
     readMap();
     player = initEntity(player,32,32,5*mapS,5*mapS,4,0,playerTextureCoords);
     weapon = initEntity(weapon,4,4,player.x,player.y,6,0,playerTextureCoords);
-    timer(0);
+    frameTimer(0);
+    gameEvents(0);
 }
 
 int main(int argc, char * argv[]){
