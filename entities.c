@@ -5,7 +5,7 @@
 #include <string.h>
 #include <stdbool.h>
 
-void drawWeapon(entity weapon){
+void drawWeapon(Weapon weapon){
     glColor3f(0.3,0.3,0.3);
     glPointSize(8);
     glBegin(GL_POINTS);
@@ -14,18 +14,21 @@ void drawWeapon(entity weapon){
     glutPostRedisplay();
 }
 
-entity initEntity(entity e, int width, int height, int x, int y, int speed, int state, long double textureCoords[8][2]){
+entity initEntity(entity e, int width, int height, int x, int y, int speed, int state, long double textureCoords[8][2], int ifWeapon){
     e.x = x; e.y = y;
     e.width=width;e.length=height;
     e.speed=speed;e.state=state;e.frame=false;e.standing=false;
     e.frame=false;
+    if(ifWeapon==1){Weapon weapon;e.weapon=weapon;}
     memcpy(e.textureCoords, textureCoords, sizeof(e.textureCoords));
     return e;
 }
 
-entity initWeapon(entity e, entity ep,int width,int height){
-    e.x = ep.x; e.y = ep.y;e.dx,e.dy=0;
-
+Weapon initWeapon(Weapon e, entity ep,int width,int length){
+    e.x=ep.x; e.y=ep.y;e.dx=0;e.dy=0;
+    e.width=width; e.length=length;
+    e.used=0;
+    return e;
 }
 
 void drawWall(int wallSprite, int x,int y,int xo,int yo, int mapS, int offset){

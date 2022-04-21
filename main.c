@@ -5,7 +5,6 @@
 #include <string.h>
 #include <stdbool.h>
 
-entity weapon;
 entity enemies[100];
 entity player;
 int mapSizeX=16,mapSizeY=11,mapS=64,offset=0,nEnemies=0;
@@ -25,8 +24,16 @@ void gameEvents(int id){
     for(int e=0;e<nEnemies;e++){
         srand(rand());
         int r = rand()%8;
-        if(r>=4){enemies[e].dx=0;enemies[e].dy=0;enemies[e].standing=true;}
+        if(r>=4){
+            enemies[e].dx=0;enemies[e].dy=0;enemies[e].standing=true;
+            if(enemies[e].weapon.used!=1 && r==4){
+                enemies[e].weapon.used=1;
+                enemies[e].weapon.dx=enemyDir[enemies[e].state][0]*8;
+                enemies[e].weapon.dy=enemyDir[enemies[e].state][1]*8;
+            }
+        }
         else{
+            enemies[e].weapon = resetWeapon(enemies[e].weapon,enemies[e]);
             enemies[e].state = r;enemies[e].standing=false;
             enemies[e].dx = enemyDir[enemies[e].state][0];enemies[e].dy = enemyDir[enemies[e].state][1];
         }
@@ -40,7 +47,8 @@ void readMap(){
     for (int y=0;y<mapSizeY;y++){
         for (int x=0;x<mapSizeX;x++){
             if (map[y*mapSizeX+x]==3){
-                enemies[nEnemies] = initEntity(enemy,32,32,x*mapS,y*mapS,4,0,redMoblinTextureCoords);
+                enemies[nEnemies] = initEntity(enemy,32,32,x*mapS,y*mapS,4,0,redMoblinTextureCoords,1);
+                enemies[nEnemies].weapon = initWeapon(enemies[nEnemies].weapon, enemies[nEnemies],8,8);
                 nEnemies++;
             }
         }
@@ -55,12 +63,14 @@ void update_enemies(){
             glutPostRedisplay();
         }
         else{enemies[e].standing=true;}
+        enemies[e].weapon=updateWeapon(enemies[e].weapon,enemies[e]);
         drawEntity(enemies[e]);
     }
 }
 
 void updatePlayer(){
     drawEntity(player);
+    player.weapon = updateWeapon(player.weapon,player);
     for(int e=0;e<2;e++){
         int c = dynamicCollision(enemies[e].x,enemies[e].x,player.x,player.width,enemies[e].y,enemies[e].length,player.y,player.length);
     }
@@ -78,7 +88,6 @@ void drawMap(){
 void display(){
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     drawMap();
-    weapon = updateWeapon(weapon,player);
     updatePlayer();
     update_enemies();
     glutSwapBuffers();
@@ -91,7 +100,10 @@ void buttons(unsigned char key, int x, int y){
     if(key=='w') {player.dy=-player.speed;player.dx=0;player.state=2;}
     if(key=='s') {player.dy=player.speed;player.dx=0;player.state=0;}
     if(key==32) {
-        if(weapon.state==0){weapon.dx=sDir[player.state][0];weapon.dy=sDir[player.state][1];weapon.state=1;}
+        if(player.weapon.used==0){
+            player.weapon.used=1;
+            player.weapon.dx=sDir[player.state][0]; player.weapon.dy=sDir[player.state][1];
+        }
         player.standing=true;
     }
     if (key=='a' || key=='d' || key=='w' || key=='s'){
@@ -107,8 +119,8 @@ void init(){
     glClearColor(0.3,0.3,0.3,0);
     gluOrtho2D(0,1024,704,0);
     readMap();
-    player = initEntity(player,32,32,5*mapS,5*mapS,4,0,playerTextureCoords);
-    weapon = initEntity(weapon,4,4,player.x,player.y,6,0,playerTextureCoords);
+    player = initEntity(player,32,32,5*mapS,5*mapS,4,0,playerTextureCoords,1);
+    player.weapon = initWeapon(player.weapon,player,8,8);
     frameTimer(0);
     gameEvents(0);
 }

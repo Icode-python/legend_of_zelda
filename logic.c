@@ -26,19 +26,24 @@ int dynamicCollision(int x1, int width1, int x2, int width2, int y1, int length1
 
 }
 
-entity updateWeapon(entity weapon, entity player){
-    if(weapon.state==1){
+Weapon resetWeapon(Weapon weapon,entity e){
+    weapon.used=0;
+    weapon.dx=0;weapon.dy=0;
+    weapon.x=e.x+e.width/2;weapon.y=e.y+e.length/2;
+    return weapon;
+}
+
+Weapon updateWeapon(Weapon weapon, entity e){
+    if(weapon.used==1){
         int c = staticCollision(map,weapon.x,weapon.y,4,4);
         if(c==0){
             drawWeapon(weapon);
             weapon.x+=weapon.dx; weapon.y+=weapon.dy;
         }
-        else if(c==1){
-            weapon.state=0;weapon.dx=0;weapon.dy=0;weapon.x=player.x+player.width/2;weapon.y=player.y+player.length/2;
-        }
+        else if(c==1){weapon = resetWeapon(weapon,e);}
     }
     else{
-        weapon.x=player.x+player.width/2;weapon.y=player.y+player.length/2; 
+        weapon.x=e.x+e.width/2;weapon.y=e.y+e.length/2;;
     }
     return weapon;
 }
