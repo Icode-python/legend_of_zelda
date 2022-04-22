@@ -8,12 +8,13 @@
 void drawWeapon(Weapon w){
     glPointSize(1);
     glBegin(GL_POINTS);
+    double modColor = rand()%75; modColor = modColor/255;
     for (int y=0;y<w.length;y++){
         for (int x=0;x<w.width;x++){
             int a = y+w.textureCoords[w.state][1];
             int z = x+w.textureCoords[w.state][0];
             if(spriteAtlas[a][z][0] <= 1){
-                glColor3f(spriteAtlas[a][z][0],spriteAtlas[a][z][1],spriteAtlas[a][z][2]);
+                glColor3f(spriteAtlas[a][z][0]+modColor,spriteAtlas[a][z][1]+modColor,spriteAtlas[a][z][2]+modColor);
                 glVertex2i(w.x+x,w.y+y);
             }
         }

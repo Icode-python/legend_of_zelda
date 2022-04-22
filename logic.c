@@ -35,7 +35,7 @@ Weapon resetWeapon(Weapon weapon,entity e){
 
 Weapon updateWeapon(Weapon weapon, entity e){
     if(weapon.used==1){
-        int c = staticCollision(map,weapon.x,weapon.y,4,4);
+        int c = staticCollision(map,weapon.x,weapon.y,weapon.width,weapon.length);
         if(c==0){
             drawWeapon(weapon);
             weapon.x+=weapon.dx; weapon.y+=weapon.dy;

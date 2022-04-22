@@ -14,14 +14,15 @@ for y in range(height):
     for x in range(width):
         if has_alpha:
             r, g, b, a = pixels[x,y]
-            if a < 255:
+            if a < 10:
                 array[y][x] = [2,3,4]
             else:
                 array[y][x] = [r/255,g/255,b/255]
         else:
             r, g, b = pixels[x,y]
             array[y][x] = [r/255,g/255,b/255] # Map values from range 0-255 to 0-1
-          
+
+
 file = open("l", "w+")
 for x in array:
     e = ""
@@ -33,3 +34,15 @@ for x in array:
         else: e = e + y 
     file.write(str(e)+ '\n')
 file.close()
+
+done = [[2,3,4]]
+nArr = []
+
+for y in array:
+    for x in y:
+        if x not in done:
+            nArr.append(x)
+            done.append(x)
+print(nArr)
+print(len(nArr))
+
