@@ -29,7 +29,7 @@ int dynamicCollision(int x1, int width1, int x2, int width2, int y1, int length1
 Weapon resetWeapon(Weapon weapon,entity e){
     weapon.used=0;
     weapon.dx=0;weapon.dy=0;
-    weapon.x=e.x+e.width/2;weapon.y=e.y+e.length/2;
+    weapon.x=e.x+e.width-weapon.width;weapon.y=e.y+e.length-weapon.length;
     return weapon;
 }
 
@@ -43,7 +43,26 @@ Weapon updateWeapon(Weapon weapon, entity e){
         else if(c==1){weapon = resetWeapon(weapon,e);}
     }
     else{
-        weapon.x=e.x+e.width/2;weapon.y=e.y+e.length/2;;
+        weapon.state = e.state;
+        weapon.x=e.x+e.width-weapon.width;weapon.y=e.y+e.length-weapon.length;;
     }
     return weapon;
+}
+
+entity walkCycle(entity e){
+    srand(rand());
+    int r = rand()%5;
+    if(r>=4){
+        e.dx=0;e.dy=0;e.standing=true;
+        if(e.weapon.used!=1 && r==4){
+            e.weapon.used=1;
+            e.weapon.dx=enemyDir[e.state][0]*e.weapon.speed;
+            e.weapon.dy=enemyDir[e.state][1]*e.weapon.speed;
+        }
+    }
+    else{
+        e.state = r;e.standing=false;
+        e.dx = enemyDir[e.state][0];e.dy = enemyDir[e.state][1];
+    }
+    return e;
 }

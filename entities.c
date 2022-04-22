@@ -5,13 +5,20 @@
 #include <string.h>
 #include <stdbool.h>
 
-void drawWeapon(Weapon weapon){
-    glColor3f(0.3,0.3,0.3);
-    glPointSize(8);
+void drawWeapon(Weapon w){
+    glPointSize(1);
     glBegin(GL_POINTS);
-    glVertex2i(weapon.x,weapon.y);
+    for (int y=0;y<w.length;y++){
+        for (int x=0;x<w.width;x++){
+            int a = y+w.textureCoords[w.state][1];
+            int z = x+w.textureCoords[w.state][0];
+            if(spriteAtlas[a][z][0] <= 1){
+                glColor3f(spriteAtlas[a][z][0],spriteAtlas[a][z][1],spriteAtlas[a][z][2]);
+                glVertex2i(w.x+x,w.y+y);
+            }
+        }
+    }
     glEnd();
-    glutPostRedisplay();
 }
 
 entity initEntity(entity e, int width, int height, int x, int y, int speed, int state, long double textureCoords[8][2], int ifWeapon){
@@ -24,10 +31,12 @@ entity initEntity(entity e, int width, int height, int x, int y, int speed, int 
     return e;
 }
 
-Weapon initWeapon(Weapon e, entity ep,int width,int length){
+
+Weapon initWeapon(Weapon e, entity ep,int width,int length, int speed,long double textureCoords[4][2]){
     e.x=ep.x; e.y=ep.y;e.dx=0;e.dy=0;
     e.width=width; e.length=length;
-    e.used=0;
+    e.used=0;e.state=0;e.speed=speed;
+    memcpy(e.textureCoords,textureCoords,sizeof(e.textureCoords));
     return e;
 }
 
