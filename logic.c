@@ -26,43 +26,66 @@ int dynamicCollision(int x1, int width1, int x2, int width2, int y1, int length1
 
 }
 
-Weapon resetWeapon(Weapon weapon,entity e){
-    weapon.used=0;
-    weapon.dx=0;weapon.dy=0;
-    weapon.x=e.x+e.width-weapon.width;weapon.y=e.y+e.length-weapon.length;
+Weapon * resetWeapon(Weapon * weapon,entity * e){
+    weapon->used=0;
+    weapon->dx=0;weapon->dy=0;
+    weapon->x=e->x+e->width-weapon->width;weapon->y=e->y+e->length-weapon->length;
     return weapon;
 }
 
-Weapon updateWeapon(Weapon weapon, entity e){
-    if(weapon.used==1){
-        int c = staticCollision(map,weapon.x,weapon.y,weapon.width,weapon.length);
+Weapon * updateWeapon(Weapon * weapon, entity * e){
+    if(weapon->used==1){
+        int c = staticCollision(map,weapon->x,weapon->y,weapon->width,weapon->length);
         if(c==0){
             drawWeapon(weapon);
-            weapon.x+=weapon.dx; weapon.y+=weapon.dy;
+            weapon->x+=weapon->dx; weapon->y+=weapon->dy;
         }
-        else if(c==1){weapon = resetWeapon(weapon,e);}
+        else if(c==1){resetWeapon(weapon,e);}
     }
     else{
-        weapon.state = e.state;
-        weapon.x=e.x+e.width-weapon.width;weapon.y=e.y+e.length-weapon.length;;
+        weapon->state = e->state;
+        weapon->x=e->x+e->width-weapon->width;weapon->y=e->y+e->length-weapon->length;;
     }
     return weapon;
 }
 
-entity walkCycle(entity e){
+entity * walkCycle(entity * e){
     srand(rand());
-    int r = rand()%5;
+    int r = rand()%8;
     if(r>=4){
-        e.dx=0;e.dy=0;e.standing=true;
-        if(e.weapon.used!=1 && r==4){
-            e.weapon.used=1;
-            e.weapon.dx=enemyDir[e.state][0]*e.weapon.speed;
-            e.weapon.dy=enemyDir[e.state][1]*e.weapon.speed;
+        e->dx=0;e->dy=0;e->standing=true;
+        if(e->weapon->used!=1 && r==4){
+            e->weapon->used=1;
+            e->weapon->dx=enemyDir[e->state][0]*e->weapon->speed;
+            e->weapon->dy=enemyDir[e->state][1]*e->weapon->speed;
         }
     }
     else{
-        e.state = r;e.standing=false;
-        e.dx = enemyDir[e.state][0];e.dy = enemyDir[e.state][1];
+        e->state = r;e->standing=false;
+        e->dx = enemyDir[e->state][0];e->dy = enemyDir[e->state][1];
     }
     return e;
+}
+
+void buttons(unsigned char key, int x, int y){
+    if(!player->hurt){
+        if(key=='a' && !player->hurt) {player->dx=-player->speed;player->dy=0;player->state=3;}
+        if(key=='d' && !player->hurt) {player->dx=player->speed;player->dy=0;player->state=1;}
+        if(key=='w' && !player->hurt) {player->dy=-player->speed;player->dx=0;player->state=2;}
+        if(key=='s' && !player->hurt) {player->dy=player->speed;player->dx=0;player->state=0;}
+        if(key==32) {
+            if(player->weapon->used==0){
+                player->weapon->used=1;
+                player->weapon->dx=sDir[player->state][0]*player->weapon->speed; player->weapon->dy=sDir[player->state][1]*player->weapon->speed;
+            }
+            player->standing=true;
+        }
+        if (key=='a' || key=='d' || key=='w' || key=='s'){
+            player->standing=false;
+            int c = staticCollision(map,player->x+player->dx,player->y+player->dy,player->width,player->length);
+            if(c == 0){player->x+=player->dx;player->y+=player->dy;}
+            else{player->frame=0;player->standing=true;}
+        }
+        glutPostRedisplay();
+    }
 }
