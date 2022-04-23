@@ -8,7 +8,9 @@
 void drawWeapon(Weapon w){
     glPointSize(1);
     glBegin(GL_POINTS);
-    double modColor = rand()%75; modColor = modColor/255;
+    double modColor;
+    if(w.changeColor==true){modColor = rand()%75; modColor = modColor/255;}
+    else{modColor=0;}
     for (int y=0;y<w.length;y++){
         for (int x=0;x<w.width;x++){
             int a = y+w.textureCoords[w.state][1];
@@ -22,21 +24,33 @@ void drawWeapon(Weapon w){
     glEnd();
 }
 
-entity initEntity(entity e, int width, int height, int x, int y, int speed, int state, long double textureCoords[8][2], int ifWeapon){
+entity initEntity(entity e, int width, int height, int x, int y, int speed, int state, int health, long double textureCoords[8][2], int ifWeapon){
     e.x = x; e.y = y;
     e.width=width;e.length=height;
     e.speed=speed;e.state=state;e.frame=false;e.standing=false;
-    e.frame=false;
+    e.frame=false;e.health=health;e.hurt=false;e.alive=true;
     if(ifWeapon==1){Weapon weapon;e.weapon=weapon;}
     memcpy(e.textureCoords, textureCoords, sizeof(e.textureCoords));
     return e;
 }
 
+entity EntityCollision(entity e, entity target){
+    int d = 0;
+    if(target.weapon.used==true){d = dynamicCollision(e.x,e.width,target.weapon.x,target.weapon.width,e.y,e.length,target.weapon.y,target.weapon.length);}
+    if(d==1){
+        e.dx=target.weapon.dx/target.weapon.speed;e.dy=target.weapon.dy/target.weapon.speed;
+        if(e.health<=0){e.alive=false;}
+        else{e.health--;}
+    }
+    return e;
+}
 
-Weapon initWeapon(Weapon e, entity ep,int width,int length, int speed,long double textureCoords[4][2]){
+
+Weapon initWeapon(Weapon e, entity ep,int width,int length, int speed, int damage, bool changeColor, long double textureCoords[4][2]){
     e.x=ep.x; e.y=ep.y;e.dx=0;e.dy=0;
     e.width=width; e.length=length;
     e.used=0;e.state=0;e.speed=speed;
+    e.damage = damage; e.changeColor = changeColor;
     memcpy(e.textureCoords,textureCoords,sizeof(e.textureCoords));
     return e;
 }

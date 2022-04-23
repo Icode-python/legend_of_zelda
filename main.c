@@ -13,7 +13,7 @@ int enemyDir[4][2] = {{-1,0},{0,1},{1,0},{0,-1}};
 
 void frameTimer(int id){
     for(int e=0;e<nEnemies;e++){
-        if(enemies[e].standing==false){enemies[e].frame = !enemies[e].frame;}
+        if(enemies[e].standing==false && enemies[e].alive){enemies[e].frame = !enemies[e].frame;}
     }
     if(!player.standing){player.frame=!player.frame;}
     player.standing=true;
@@ -21,7 +21,7 @@ void frameTimer(int id){
 }
 
 void gameEvents(int id){
-    for(int e=0;e<nEnemies;e++){enemies[e] = walkCycle(enemies[e]);}
+    for(int e=0;e<nEnemies;e++){if(enemies[e].alive){enemies[e] = walkCycle(enemies[e]);}}
     glutTimerFunc(1000, gameEvents, 0);
 }
 
@@ -31,8 +31,8 @@ void readMap(){
     for (int y=0;y<mapSizeY;y++){
         for (int x=0;x<mapSizeX;x++){
             if (map[y*mapSizeX+x]==3){
-                enemies[nEnemies] = initEntity(enemy,32,32,x*mapS,y*mapS,4,0,redMoblinTextureCoords,1);
-                enemies[nEnemies].weapon = initWeapon(enemies[nEnemies].weapon, enemies[nEnemies],32,32,4,arrowTextureCoords);
+                enemies[nEnemies] = initEntity(enemy,32,32,x*mapS,y*mapS,4,0,2,redMoblinTextureCoords,1);
+                enemies[nEnemies].weapon = initWeapon(enemies[nEnemies].weapon, enemies[nEnemies],32,32,4,1,false,arrowTextureCoords);
                 nEnemies++;
             }
         }
@@ -41,22 +41,29 @@ void readMap(){
 
 void update_enemies(){
     for(int e=0;e<nEnemies;e++){
-        int c = staticCollision(map,enemies[e].x+enemies[e].dx,enemies[e].y+enemies[e].dy,enemies[e].width,enemies[e].length);
-        if(c == 0){
-            enemies[e].x+=enemies[e].dx;enemies[e].y+=enemies[e].dy;
-            glutPostRedisplay();
+        if(enemies[e].alive){
+            enemies[e] = EntityCollision(enemies[e],player);
+            int d = dynamicCollision(enemies[e].x,enemies[e].width,player.weapon.x,player.weapon.width,enemies[e].y,enemies[e].length,player.weapon.y,player.weapon.length);
+            if(d==1){player.weapon = resetWeapon(player.weapon,player);}
+            int c = staticCollision(map,enemies[e].x+enemies[e].dx,enemies[e].y+enemies[e].dy,enemies[e].width,enemies[e].length);
+            if(c == 0){
+                enemies[e].x+=enemies[e].dx;enemies[e].y+=enemies[e].dy;
+                glutPostRedisplay();
+            }
+            else{enemies[e].standing=true;}
+            drawEntity(enemies[e]);
         }
-        else{enemies[e].standing=true;}
         enemies[e].weapon=updateWeapon(enemies[e].weapon,enemies[e]);
-        drawEntity(enemies[e]);
     }
 }
 
 void updatePlayer(){
     player.weapon = updateWeapon(player.weapon,player);
     drawEntity(player);
-    for(int e=0;e<2;e++){
-        int c = dynamicCollision(enemies[e].x,enemies[e].x,player.x,player.width,enemies[e].y,enemies[e].length,player.y,player.length);
+    for(int e=0;e<nEnemies;e++){
+        if(enemies[e].alive){
+            int c = dynamicCollision(enemies[e].x,enemies[e].x,player.x,player.width,enemies[e].y,enemies[e].length,player.y,player.length);
+        }
     }
 }
 
@@ -72,8 +79,8 @@ void drawMap(){
 void display(){
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     drawMap();
-    updatePlayer();
     update_enemies();
+    updatePlayer();
     glutSwapBuffers();
 }
 
@@ -103,8 +110,8 @@ void init(){
     glClearColor(0.3,0.3,0.3,0);
     gluOrtho2D(0,1024,704,0);
     readMap();
-    player = initEntity(player,32,32,5*mapS,5*mapS,4,0,playerTextureCoords,1);
-    player.weapon = initWeapon(player.weapon,player,32,32,4,swordTextureCoords);
+    player = initEntity(player,32,32,5*mapS,5*mapS,4,0,8,playerTextureCoords,1);
+    player.weapon = initWeapon(player.weapon,player,32,32,4,1,true,swordTextureCoords);
     frameTimer(0);
     gameEvents(0);
 }
