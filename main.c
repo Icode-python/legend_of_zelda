@@ -6,7 +6,7 @@
 #include <stdbool.h>
 
 entity * enemies[100];
-int mapSizeX=16,mapSizeY=11,mapS=64,offset=0,nEnemies=0,worldX=8,worldY=8;
+int mapSizeX=16,mapSizeY=11,mapS=64,offset=0,nEnemies=0,worldX=7,worldY=7,screenWidth=1024,screenHeight=704;
 int Dir[4][2] = {{-1,0},{0,1},{1,0},{0,-1}};
 
 void frameTimer(int id){
@@ -24,7 +24,8 @@ void gameEvents(int id){
 void readMap(){
     for (int y=0;y<11;y++){
         for (int x=0;x<16;x++){
-            map[y][x] = worldMapBlocking[88/worldY+y][256/worldX+x];
+            map[y][x] = worldMapBlocking[worldY*11+y][worldX*16+x];
+            spriteWorldMap[y][x] = initEntity(mapS,mapS,x,y,0,0,0,0,worldMapSprites[worldMapTiles[worldY*11+y][worldX*16+x]],false);
         }
     }
     entity * enemy;
@@ -41,7 +42,6 @@ void readMap(){
 }
 
 void update_enemies(){
-
     for(int e=0;e<nEnemies;e++){
         if(enemies[e]->alive){
             EntityCollision(enemies[e],player);
@@ -58,6 +58,7 @@ void update_enemies(){
 }
 
 void updatePlayer(){
+    if(scrollMap(player)==1){readMap();}
     updateWeapon(player->weapon,player);
     drawEntity(player);
     for(int e=0;e<nEnemies;e++){
@@ -87,7 +88,7 @@ void display(){
 
 void init(){
     glClearColor(0.3,0.3,0.3,0);
-    gluOrtho2D(0,1024,704,0);
+    gluOrtho2D(0,screenWidth,screenHeight,0);
     readMap();
     player = initEntity(32,32,5*mapS,5*mapS,4,0,12,2,playerTextureCoords,1);
     player->weapon = initWeapon(player,32,32,4,1,true,swordTextureCoords);
@@ -98,7 +99,7 @@ void init(){
 int main(int argc, char * argv[]){
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA);
-    glutInitWindowSize(1024, 704);
+    glutInitWindowSize(screenWidth, screenHeight);
     glutCreateWindow("legend of zelda");
     init();
     glutDisplayFunc(display);

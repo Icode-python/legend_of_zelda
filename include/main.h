@@ -3,7 +3,7 @@
 #include <string.h>
 #include <stdbool.h>
 
-extern int mapSizeX;extern int mapSizeY;extern int mapS;extern int offset;
+extern int mapSizeX;extern int mapSizeY;extern int mapS;extern int offset;extern int worldX;extern int worldY;extern int screenWidth; extern int screenHeight;
 
 extern long double wall[2][64*64][3];
 extern long double playerTextureCoords[8][2];
@@ -13,6 +13,8 @@ extern long double swordTextureCoords[4][2];
 long double arrowTextureCoords[4][2];
 extern long double spriteAtlas[96][768][3];
 extern int worldMapBlocking[88][256];
+extern int worldMapTiles[88][256];
+extern long double worldMapSprites[144][2];
 int Dir[4][2];
 
 extern int map[11][16];
@@ -54,6 +56,7 @@ typedef struct Entity{
 } entity;
 
 entity * player;
+entity * spriteWorldMap[11][16];
 
 //entity 
 void drawWeapon(Weapon * w);
@@ -72,3 +75,4 @@ Weapon * resetWeapon(Weapon * weapon,entity * e);
 entity * EntityCollision(entity * e, entity * target);
 void buttons(unsigned char key, int x, int y);
 entity * obstacleCollision(entity * e);
+int scrollMap(entity * e);

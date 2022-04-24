@@ -22,6 +22,7 @@ void drawWeapon(Weapon * w){
         }
     }
     glEnd();
+    glutPostRedisplay();
 }
 
 
@@ -106,4 +107,8 @@ void drawEntity(entity * e){
         }
     }
     glEnd();
+}
+
+void drawWorld(){
+    
 }

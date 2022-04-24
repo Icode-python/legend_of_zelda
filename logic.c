@@ -27,6 +27,14 @@ int dynamicCollision(int x1, int width1, int x2, int width2, int y1, int length1
 }
 
 
+int scrollMap(entity * e){
+    if(e->x<0){worldX-=1;e->x=screenWidth-e->width;return 1;}
+    if(e->x>=screenWidth){worldX+=1;e->x=0+e->width;return 1;}
+    if(e->y<0){worldY-=1;e->y=screenHeight-e->length;return 1;}
+    if(e->y>=screenHeight){worldY+=1;e->y=0+e->length;return 1;}
+    return 0;
+}
+
 Weapon * resetWeapon(Weapon * weapon,entity * e){
     weapon->used=0;
     weapon->dx=0;weapon->dy=0;

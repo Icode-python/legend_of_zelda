@@ -1,7 +1,8 @@
 from PIL import Image
-image = Image.open('sprites/sprite_atlas.png')
+image = Image.open('sprites/world_tiles.png')
 width, height = image.size
 pixels = image.load()
+print(width,height)
 
 # Check if has alpha, to avoid "too many values to unpack" error
 has_alpha = len(pixels[0,0]) == 4
@@ -34,15 +35,3 @@ for x in array:
         else: e = e + y 
     file.write(str(e)+ '\n')
 file.close()
-
-done = [[2,3,4]]
-nArr = []
-
-for y in array:
-    for x in y:
-        if x not in done:
-            nArr.append(x)
-            done.append(x)
-print(nArr)
-print(len(nArr))
-
