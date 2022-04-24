@@ -25,10 +25,10 @@ void drawWeapon(Weapon * w){
 }
 
 
-entity * initEntity(int width, int height, int x, int y, int speed, int state, int health, long double textureCoords[8][2], int ifWeapon){
+entity * initEntity(int width, int height, int x, int y, int speed, int state, int health, int animMax, long double textureCoords[8][2], int ifWeapon){
     entity *e;
     e = (entity *)malloc(sizeof(entity));
-    e->x = x; e->y = y;
+    e->x = x; e->y = y;e->animMax=animMax;
     e->width=width;e->length=height;
     e->speed=speed;e->state=state;e->frame=false;e->standing=false;
     e->frame=false;e->health=health;e->hurt=false;e->alive=true;
@@ -40,10 +40,13 @@ entity * initEntity(int width, int height, int x, int y, int speed, int state, i
 entity * animation(entity * e){
     if(e->standing==false && e->alive && !e->hurt){e->frame = !e->frame;}
     if(e->hurt){
-        e->x+=e->dx;e->y+=e->dy;
+        obstacleCollision(e);
         e->animTimer++; 
-        if(e->animTimer>=1){e->dx=0;e->dy=0;}
-        if(e->animTimer>=5){e->animTimer=0;e->hurt=false;}
+        if(e->animTimer>=e->animMax){e->dx=0;e->dy=0;}
+        if(e->animTimer>=e->animMax+2){e->animTimer=0;e->hurt=false;}
+    }
+    if(!e->alive){
+        e->animTimer++;
     }
     return e;
 }

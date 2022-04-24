@@ -5,10 +5,10 @@
 #include <string.h>
 #include <stdbool.h>
 
-int staticCollision(int map[], int x1, int y1, int width, int length){
+int staticCollision(int map[11][16], int x1, int y1, int width, int length){
     for (int y=0;y<mapSizeY;y++){
         for (int x=0;x<mapSizeX;x++){
-            if (map[y*mapSizeX+x]==1){
+            if (map[y][x]==1){
                 if(x1+width>x*mapS && x1<x*mapS+mapS && y1+length>y*mapS && y1<y*mapS+mapS){
                     return 1;
                 }
@@ -25,6 +25,7 @@ int dynamicCollision(int x1, int width1, int x2, int width2, int y1, int length1
     else {return 0;}
 
 }
+
 
 Weapon * resetWeapon(Weapon * weapon,entity * e){
     weapon->used=0;
@@ -56,36 +57,38 @@ entity * walkCycle(entity * e){
         e->dx=0;e->dy=0;e->standing=true;
         if(e->weapon->used!=1 && r==4){
             e->weapon->used=1;
-            e->weapon->dx=enemyDir[e->state][0]*e->weapon->speed;
-            e->weapon->dy=enemyDir[e->state][1]*e->weapon->speed;
+            e->weapon->dx=Dir[e->state][0]*e->weapon->speed;
+            e->weapon->dy=Dir[e->state][1]*e->weapon->speed;
         }
     }
     else{
         e->state = r;e->standing=false;
-        e->dx = enemyDir[e->state][0];e->dy = enemyDir[e->state][1];
+        e->dx = Dir[e->state][0];e->dy = Dir[e->state][1];
     }
     return e;
 }
 
+entity * obstacleCollision(entity * e){
+    int c = staticCollision(map,e->x+e->dx*e->speed,e->y+e->dy*e->speed,e->width,e->length);
+    if(c == 0){e->x+=e->dx*e->speed;e->y+=e->dy*e->speed;}
+    else{e->frame=0;e->standing=true;}
+}
+
 void buttons(unsigned char key, int x, int y){
-    if(!player->hurt){
-        if(key=='a' && !player->hurt) {player->dx=-player->speed;player->dy=0;player->state=3;}
-        if(key=='d' && !player->hurt) {player->dx=player->speed;player->dy=0;player->state=1;}
-        if(key=='w' && !player->hurt) {player->dy=-player->speed;player->dx=0;player->state=2;}
-        if(key=='s' && !player->hurt) {player->dy=player->speed;player->dx=0;player->state=0;}
-        if(key==32) {
-            if(player->weapon->used==0){
-                player->weapon->used=1;
-                player->weapon->dx=sDir[player->state][0]*player->weapon->speed; player->weapon->dy=sDir[player->state][1]*player->weapon->speed;
-            }
-            player->standing=true;
+    if(key=='a' && !player->hurt) {player->dx=-1;player->dy=0;player->state=0;}
+    if(key=='d' && !player->hurt) {player->dx=1;player->dy=0;player->state=2;}
+    if(key=='w' && !player->hurt) {player->dy=-1;player->dx=0;player->state=3;}
+    if(key=='s' && !player->hurt) {player->dy=1;player->dx=0;player->state=1;}
+    if(key==32) {
+        if(player->weapon->used==0){
+            player->weapon->used=1;
+            player->weapon->dx=Dir[player->state][0]*player->weapon->speed; player->weapon->dy=Dir[player->state][1]*player->weapon->speed;
         }
-        if (key=='a' || key=='d' || key=='w' || key=='s'){
-            player->standing=false;
-            int c = staticCollision(map,player->x+player->dx,player->y+player->dy,player->width,player->length);
-            if(c == 0){player->x+=player->dx;player->y+=player->dy;}
-            else{player->frame=0;player->standing=true;}
-        }
-        glutPostRedisplay();
+        player->standing=true;
     }
+    if (key=='a' || key=='d' || key=='w' || key=='s'){
+        obstacleCollision(player);
+        player->standing=false;
+    }
+    glutPostRedisplay();
 }
