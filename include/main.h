@@ -14,7 +14,9 @@ long double arrowTextureCoords[4][2];
 extern long double spriteAtlas[96][768][3];
 extern int worldMapBlocking[88][256];
 extern int worldMapTiles[88][256];
-extern long double worldMapSprites[144][2];
+extern int worldMapSpritesTextureCoords[144][2];
+extern long double worldMapTilesSprites[548][1228][3];
+int spriteWorldMap[11][16];
 int Dir[4][2];
 
 extern int map[11][16];
@@ -56,7 +58,6 @@ typedef struct Entity{
 } entity;
 
 entity * player;
-entity * spriteWorldMap[11][16];
 
 //entity 
 void drawWeapon(Weapon * w);
@@ -76,3 +77,5 @@ entity * EntityCollision(entity * e, entity * target);
 void buttons(unsigned char key, int x, int y);
 entity * obstacleCollision(entity * e);
 int scrollMap(entity * e);
+void drawWorldSprite(int x, int y, int textureCoords[2]);
+void drawWorld();

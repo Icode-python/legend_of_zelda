@@ -109,6 +109,24 @@ void drawEntity(entity * e){
     glEnd();
 }
 
+void drawWorldSprite(int wx, int wy, int textureCoords[2]){
+    glPointSize(1);
+    glBegin(GL_POINTS);
+    for (int y=0;y<mapS;y++){
+        for (int x=0;x<mapS;x++){
+            int a = y+textureCoords[1];
+            int z = x+textureCoords[0];
+            glColor3f(worldMapTilesSprites[a][z][0],worldMapTilesSprites[a][z][1],worldMapTilesSprites[a][z][2]);
+            glVertex2i(wx+x,wy+y);
+        }
+    }
+    glEnd();
+}
+
 void drawWorld(){
-    
+    for (int y=0;y<mapSizeY;y++){
+        for (int x=0;x<mapSizeX;x++){
+            drawWorldSprite(x*mapS, y*mapS, worldMapSpritesTextureCoords[spriteWorldMap[y][x]]);
+        }
+    }
 }

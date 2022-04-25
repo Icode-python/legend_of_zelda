@@ -22,16 +22,12 @@ void gameEvents(int id){
 }
 
 void readMap(){
-    for (int y=0;y<11;y++){
-        for (int x=0;x<16;x++){
-            map[y][x] = worldMapBlocking[worldY*11+y][worldX*16+x];
-            spriteWorldMap[y][x] = initEntity(mapS,mapS,x,y,0,0,0,0,worldMapSprites[worldMapTiles[worldY*11+y][worldX*16+x]],false);
-        }
-    }
     entity * enemy;
     nEnemies = 0;
     for (int y=0;y<mapSizeY;y++){
         for (int x=0;x<mapSizeX;x++){
+            map[y][x] = worldMapBlocking[worldY*11+y][worldX*16+x];
+            spriteWorldMap[y][x] = worldMapTiles[worldY*11+y][worldX*16+x];
             if (map[y][x]==3){
                 enemies[nEnemies] = initEntity(32,32,x*mapS,y*mapS,1,0,2,1,redMoblinTextureCoords,1);
                 enemies[nEnemies]->weapon = initWeapon(enemies[nEnemies],32,32,4,1,false,arrowTextureCoords);
@@ -80,6 +76,7 @@ void drawMap(){
 void display(){
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     drawMap();
+    drawWorld();
     update_enemies();
     updatePlayer(player);
     glutSwapBuffers();
