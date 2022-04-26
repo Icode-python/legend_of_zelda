@@ -28,13 +28,14 @@ void readMap(){
         for (int x=0;x<mapSizeX;x++){
             map[y][x] = worldMapBlocking[worldY*11+y][worldX*16+x];
             spriteWorldMap[y][x] = worldMapTiles[worldY*11+y][worldX*16+x];
-            if (map[y][x]==3){
-                enemies[nEnemies] = initEntity(32,32,x*mapS,y*mapS,1,0,2,1,redMoblinTextureCoords,1);
-                enemies[nEnemies]->weapon = initWeapon(enemies[nEnemies],32,32,4,1,false,arrowTextureCoords);
+            if (map[y][x]==2){
+                enemies[nEnemies] = initEntity(64,64,x*mapS,y*mapS,1,0,2,1,redOctorockTextureCoords,1);
+                enemies[nEnemies]->weapon = initWeapon(enemies[nEnemies],64,64,4,1,false,arrowTextureCoords);
                 nEnemies++;
             }
         }
     }
+    drawWorld();
 }
 
 void update_enemies(){
@@ -54,7 +55,7 @@ void update_enemies(){
 }
 
 void updatePlayer(){
-    if(scrollMap(player)==1){readMap();}
+    if(collisionBorder(player, true)==1){readMap();scrollMap(player);}
     updateWeapon(player->weapon,player);
     drawEntity(player);
     for(int e=0;e<nEnemies;e++){
@@ -68,14 +69,14 @@ void drawMap(){
     int x,y,xo,yo;
     for (y=0;y<mapSizeY;y++){
         for (x=0;x<mapSizeX;x++){
-            if (map[y][x]==1) {drawWall(1,x,y,xo,yo,mapS,offset);} else{drawWall(0,x,y,xo,yo,mapS,offset);}
+            if (map[y][x]==0) {drawWall(1,x,y,xo,yo,mapS,offset);} else{drawWall(0,x,y,xo,yo,mapS,offset);}
         }
     }
 }
 
 void display(){
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    drawMap();
+    //drawMap();
     drawWorld();
     update_enemies();
     updatePlayer(player);
@@ -87,8 +88,8 @@ void init(){
     glClearColor(0.3,0.3,0.3,0);
     gluOrtho2D(0,screenWidth,screenHeight,0);
     readMap();
-    player = initEntity(32,32,5*mapS,5*mapS,4,0,12,2,playerTextureCoords,1);
-    player->weapon = initWeapon(player,32,32,4,1,true,swordTextureCoords);
+    player = initEntity(64,64,5*mapS,5*mapS,8,0,12,2,playerTextureCoords,1);
+    player->weapon = initWeapon(player,64,64,8,1,true,swordTextureCoords);
     frameTimer(0);
     gameEvents(0);
 }

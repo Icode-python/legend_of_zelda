@@ -110,7 +110,7 @@ for row, y in enumerate(arr):
             a = il.index(x)
             new_arr[row].append(a)
         else:
-            new_arr[row].append(0)
+            new_arr[row].append(22)
 
 f = open("l", "w+")
 for x in new_arr:

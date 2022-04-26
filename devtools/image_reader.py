@@ -1,5 +1,5 @@
 from PIL import Image
-image = Image.open('sprites/world_tiles.png')
+image = Image.open('sprites/sprite_atlas.png')
 width, height = image.size
 pixels = image.load()
 print(width,height)

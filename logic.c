@@ -8,8 +8,8 @@
 int staticCollision(int map[11][16], int x1, int y1, int width, int length){
     for (int y=0;y<mapSizeY;y++){
         for (int x=0;x<mapSizeX;x++){
-            if (map[y][x]==1){
-                if(x1+width>x*mapS && x1<x*mapS+mapS && y1+length>y*mapS && y1<y*mapS+mapS){
+            if (map[y][x]==0){
+                if(x1+width>x*mapS && x1<x*mapS+mapS && y1+length>y*mapS && y1+length/2<y*mapS+mapS){
                     return 1;
                 }
             }
@@ -26,12 +26,20 @@ int dynamicCollision(int x1, int width1, int x2, int width2, int y1, int length1
 
 }
 
+int collisionBorder(entity * e, bool ifChange){
+    if(e->x<0){if(ifChange){worldX-=1;}return 1;}
+    if(e->x+e->width>=screenWidth){if(ifChange){worldX+=1;}return 1;}
+    if(e->y<0){if(ifChange){worldY-=1;}return 1;}
+    if(e->y+e->length>=screenHeight){if(ifChange){worldY+=1;}return 1;}
+    return 0;
+}
+
 
 int scrollMap(entity * e){
-    if(e->x<0){worldX-=1;e->x=screenWidth-e->width;return 1;}
-    if(e->x>=screenWidth){worldX+=1;e->x=0+e->width;return 1;}
-    if(e->y<0){worldY-=1;e->y=screenHeight-e->length;return 1;}
-    if(e->y>=screenHeight){worldY+=1;e->y=0+e->length;return 1;}
+    if(e->x<0){e->x=screenWidth-e->width;return 1;}
+    if(e->x+e->width>=screenWidth){e->x=0;return 1;}
+    if(e->y<0){e->y=screenHeight-e->length;return 1;}
+    if(e->y+e->length>=screenHeight){e->y=0;return 1;}
     return 0;
 }
 
