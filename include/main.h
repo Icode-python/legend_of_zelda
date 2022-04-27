@@ -67,6 +67,7 @@ entity * initEntity(int width, int height, int x, int y, int speed, int state, i
 Weapon * initWeapon(entity * ep,int width,int length, int speed, int damage, bool changeColor, long double textureCoords[4][2]);
 entity * walkCycle(entity * e);
 entity * animation(entity * e);
+entity * changeEntity(entity * e, int x, int y, int health, long double textureCoords[8][2], bool alive);
 
 //math
 int staticCollision(int map[11][16], int x1, int y1, int width, int length);

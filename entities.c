@@ -38,6 +38,11 @@ entity * initEntity(int width, int height, int x, int y, int speed, int state, i
     return e;
 }
 
+entity * changeEntity(entity * e, int x, int y, int health, long double textureCoords[8][2], bool alive){
+    e->x = x; e->y = y; e->health=health; e->alive=alive;
+    memcpy(e->textureCoords, textureCoords, sizeof(e->textureCoords));
+}
+
 entity * animation(entity * e){
     if(e->standing==false && e->alive && !e->hurt){e->frame = !e->frame;}
     if(e->hurt){
