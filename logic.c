@@ -26,20 +26,20 @@ int dynamicCollision(int x1, int width1, int x2, int width2, int y1, int length1
 
 }
 
-int collisionBorder(entity * e, bool ifChange){
-    if(e->x<0){if(ifChange){worldX-=1;}return 1;}
-    if(e->x+e->width>=screenWidth){if(ifChange){worldX+=1;}return 1;}
-    if(e->y<0){if(ifChange){worldY-=1;}return 1;}
-    if(e->y+e->length>=screenHeight){if(ifChange){worldY+=1;}return 1;}
+int collisionBorder(int x, int y,int width,int length, bool ifChange){
+    if(x<0){if(ifChange){worldX-=1;}return 1;}
+    if(x+width>=screenWidth){if(ifChange){worldX+=1;}return 1;}
+    if(y<0){if(ifChange){worldY-=1;}return 1;}
+    if(y+length>=screenHeight){if(ifChange){worldY+=1;}return 1;}
     return 0;
 }
 
 
 int scrollMap(entity * e){
     if(e->x<0){e->x=screenWidth-e->width;return 1;}
-    if(e->x+e->width>=screenWidth){e->x=0;return 1;}
+    if(e->x+e->width>=screenWidth){e->x=0+e->width/2;return 1;}
     if(e->y<0){e->y=screenHeight-e->length;return 1;}
-    if(e->y+e->length>=screenHeight){e->y=0;return 1;}
+    if(e->y+e->length>=screenHeight){e->y=0+e->length/2;return 1;}
     return 0;
 }
 
@@ -53,11 +53,12 @@ Weapon * resetWeapon(Weapon * weapon,entity * e){
 Weapon * updateWeapon(Weapon * weapon, entity * e){
     if(weapon->used==1){
         int c = staticCollision(map,weapon->x,weapon->y,weapon->width,weapon->length);
-        if(c==0){
+        int d = collisionBorder(weapon->x,weapon->y,weapon->width/2,weapon->length/2,false);
+        if(c==0 && d==0){
             drawWeapon(weapon);
             weapon->x+=weapon->dx; weapon->y+=weapon->dy;
         }
-        else if(c==1){resetWeapon(weapon,e);}
+        else if(c==1 || d==1){resetWeapon(weapon,e);}
     }
     else{
         weapon->state = e->state;

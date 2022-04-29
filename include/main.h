@@ -38,8 +38,7 @@ typedef struct Weapon{
 } Weapon;
 
 typedef struct Entity{
-    int x;
-    int y;
+    int x, y, ox, oy;
     int dx;
     int dy;
     int state;
@@ -67,7 +66,7 @@ entity * initEntity(int width, int height, int x, int y, int speed, int state, i
 Weapon * initWeapon(entity * ep,int width,int length, int speed, int damage, bool changeColor, long double textureCoords[4][2]);
 entity * walkCycle(entity * e);
 entity * animation(entity * e);
-entity * changeEntity(entity * e, int x, int y, int health, long double textureCoords[8][2], bool alive);
+entity * changeEntity(entity * e, int x, int y, int ox, int oy, int health, long double textureCoords[8][2], bool alive);
 
 //math
 int staticCollision(int map[11][16], int x1, int y1, int width, int length);
@@ -77,7 +76,7 @@ Weapon * resetWeapon(Weapon * weapon,entity * e);
 entity * EntityCollision(entity * e, entity * target);
 void buttons(unsigned char key, int x, int y);
 entity * obstacleCollision(entity * e);
-int collisionBorder(entity * e, bool ifChange);
+int collisionBorder(int x, int y,int width,int length, bool ifChange);
 int scrollMap(entity * e);
 void drawWorldSprite(int x, int y, int textureCoords[2]);
 void drawWorld();

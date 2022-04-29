@@ -37,9 +37,9 @@ void readMap(){
             map[y][x] = worldMapBlocking[worldY*11+y][worldX*16+x];
             spriteWorldMap[y][x] = worldMapTiles[worldY*11+y][worldX*16+x];
             if (map[y][x]==2){
-                changeEntity(enemies[y][x], x*mapS, y*mapS, 2, redOctorockTextureCoords,true);
+                changeEntity(enemies[y][x], x*mapS, y*mapS, worldX*16+x, worldY*11+y, 2, redOctorockTextureCoords,true);
             }
-            else{changeEntity(enemies[y][x],0,0,0,redOctorockTextureCoords,false);}
+            else{changeEntity(enemies[y][x],0,0,x,y,1,redOctorockTextureCoords,false);}
         }
     }
     drawWorld();
@@ -64,7 +64,7 @@ void update_enemies(){
 }
 
 void updatePlayer(){
-    if(collisionBorder(player, true)==1){readMap();scrollMap(player);}
+    if(collisionBorder(player->x,player->y,player->width,player->length,true)==1){readMap();scrollMap(player);}
     updateWeapon(player->weapon,player);
     drawEntity(player);
     for(int y=0;y<mapSizeY;y++){
@@ -100,7 +100,7 @@ void init(){
     gluOrtho2D(0,screenWidth,screenHeight,0);
     allocEnemies();
     readMap();
-    player = initEntity(64,64,5*mapS,5*mapS,8,0,12,2,playerTextureCoords,1);
+    player = initEntity(64,64,5*mapS,5*mapS,8,0,6,2,playerTextureCoords,1);
     player->weapon = initWeapon(player,64,64,8,1,true,swordTextureCoords);
     frameTimer(0);
     gameEvents(0);
