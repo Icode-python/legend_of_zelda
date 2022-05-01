@@ -5,7 +5,7 @@
 #include <string.h>
 #include <stdbool.h>
 
-int mapSizeX=16,mapSizeY=11,mapS=64,offset=0,worldX=7,worldY=7,screenWidth=1024,screenHeight=704;
+int mapSizeX=16,mapSizeY=11,mapS=64,offset=0,worldX=7,worldY=7,screenWidth=1024,screenHeight=768,yOffset=128;
 int Dir[4][2] = {{-1,0},{0,1},{1,0},{0,-1}};
 
 void frameTimer(int id){
@@ -36,7 +36,7 @@ void readMap(){
             map[y][x] = worldMapBlocking[worldY*11+y][worldX*16+x];
             spriteWorldMap[y][x] = worldMapTiles[worldY*11+y][worldX*16+x];
             if (map[y][x]==2){
-                changeEntity(enemies[y][x], x*mapS, y*mapS, worldX*16+x, worldY*11+y, 2, redOctorockTextureCoords,true);
+                changeEntity(enemies[y][x], x*mapS, y*mapS+yOffset, worldX*16+x, worldY*11+y, 2, redOctorockTextureCoords,true);
             }
             else{changeEntity(enemies[y][x],0,0,x,y,1,redOctorockTextureCoords,false);}
         }
@@ -80,7 +80,7 @@ void init(){
     gluOrtho2D(0,screenWidth,screenHeight,0);
     allocEnemies();
     readMap();
-    player = initEntity(64,64,5*mapS,5*mapS,8,0,6,2,playerTextureCoords,1);
+    player = initEntity(64,64,5*mapS,5*mapS+yOffset,8,0,6,2,playerTextureCoords,1);
     player->weapon = initWeapon(player,64,64,8,1,true,swordTextureCoords);
     frameTimer(0);
     gameEvents(0);

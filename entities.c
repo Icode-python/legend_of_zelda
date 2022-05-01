@@ -131,7 +131,7 @@ void drawWorldSprite(int wx, int wy, int textureCoords[2]){
 void drawWorld(){
     for (int y=0;y<mapSizeY;y++){
         for (int x=0;x<mapSizeX;x++){
-            drawWorldSprite(x*mapS, y*mapS, worldMapSpritesTextureCoords[spriteWorldMap[y][x]]);
+            drawWorldSprite(x*mapS, y*mapS+yOffset, worldMapSpritesTextureCoords[spriteWorldMap[y][x]]);
         }
     }
 }

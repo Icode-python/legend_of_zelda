@@ -3,7 +3,7 @@
 #include <string.h>
 #include <stdbool.h>
 
-extern int mapSizeX;extern int mapSizeY;extern int mapS;extern int offset;extern int worldX;extern int worldY;extern int screenWidth; extern int screenHeight;
+extern int mapSizeX;extern int mapSizeY;extern int mapS;extern int offset;extern int worldX;extern int worldY;extern int screenWidth; extern int screenHeight; extern int yOffset;
 
 extern long double wall[2][64*64][3];
 extern long double playerTextureCoords[8][2];

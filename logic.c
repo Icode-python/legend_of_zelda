@@ -9,7 +9,7 @@ int staticCollision(int map[11][16], int x1, int y1, int width, int length){
     for (int y=0;y<mapSizeY;y++){
         for (int x=0;x<mapSizeX;x++){
             if (map[y][x]==0){
-                if(x1+width>x*mapS && x1<x*mapS+mapS && y1+length>y*mapS && y1+length/2<y*mapS+mapS){
+                if(x1+width>x*mapS && x1<x*mapS+mapS && y1+length>y*mapS+yOffset && y1+length/2<y*mapS+mapS+yOffset){
                     return 1;
                 }
             }
