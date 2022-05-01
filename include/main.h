@@ -57,6 +57,7 @@ typedef struct Entity{
 } entity;
 
 entity * player;
+entity * enemies[11][16];
 
 //entity 
 void drawWeapon(Weapon * w);
@@ -80,3 +81,4 @@ int collisionBorder(int x, int y,int width,int length, bool ifChange);
 int scrollMap(entity * e);
 void drawWorldSprite(int x, int y, int textureCoords[2]);
 void drawWorld();
+void update_enemies();

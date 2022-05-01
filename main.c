@@ -5,7 +5,6 @@
 #include <string.h>
 #include <stdbool.h>
 
-entity * enemies[11][16];
 int mapSizeX=16,mapSizeY=11,mapS=64,offset=0,worldX=7,worldY=7,screenWidth=1024,screenHeight=704;
 int Dir[4][2] = {{-1,0},{0,1},{1,0},{0,-1}};
 
@@ -13,7 +12,7 @@ void frameTimer(int id){
     for(int y=0;y<mapSizeY;y++){for(int x=0;x<mapSizeX;x++){animation(enemies[y][x]);}}
     animation(player);
     player->standing=true;
-    glutTimerFunc(200, frameTimer, 0);
+    glutTimerFunc(100, frameTimer, 0);
 }
 
 void gameEvents(int id){
@@ -45,24 +44,6 @@ void readMap(){
     drawWorld();
 }
 
-void update_enemies(){
-    for(int y=0;y<mapSizeY;y++){
-        for(int x=0;x<mapSizeX;x++){
-            if(enemies[y][x]->alive){
-                EntityCollision(enemies[y][x],player);
-                drawEntity(enemies[y][x]);
-                int c = staticCollision(map,enemies[y][x]->x+enemies[y][x]->dx,enemies[y][x]->y+enemies[y][x]->dy,enemies[y][x]->width,enemies[y][x]->length);
-                if(c == 0){
-                    enemies[y][x]->x+=enemies[y][x]->dx;enemies[y][x]->y+=enemies[y][x]->dy;
-                    glutPostRedisplay();
-                }
-                else{enemies[y][x]->standing=true;}
-            }
-            updateWeapon(enemies[y][x]->weapon,enemies[y][x]);
-        }
-    }
-}
-
 void updatePlayer(){
     if(collisionBorder(player->x,player->y,player->width,player->length,true)==1){readMap();scrollMap(player);}
     updateWeapon(player->weapon,player);
@@ -87,7 +68,6 @@ void drawMap(){
 
 void display(){
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    //drawMap();
     drawWorld();
     update_enemies();
     updatePlayer(player);

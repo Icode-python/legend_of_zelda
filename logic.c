@@ -91,6 +91,24 @@ entity * obstacleCollision(entity * e){
     else{e->frame=0;e->standing=true;}
 }
 
+void update_enemies(){
+    for(int y=0;y<mapSizeY;y++){
+        for(int x=0;x<mapSizeX;x++){
+            if(enemies[y][x]->alive){
+                EntityCollision(enemies[y][x],player);
+                drawEntity(enemies[y][x]);
+                int c = staticCollision(map,enemies[y][x]->x+enemies[y][x]->dx,enemies[y][x]->y+enemies[y][x]->dy,enemies[y][x]->width,enemies[y][x]->length);
+                if(c == 0){
+                    enemies[y][x]->x+=enemies[y][x]->dx;enemies[y][x]->y+=enemies[y][x]->dy;
+                    glutPostRedisplay();
+                }
+                else{enemies[y][x]->standing=true;}
+            }
+            updateWeapon(enemies[y][x]->weapon,enemies[y][x]);
+        }
+    }
+}
+
 void buttons(unsigned char key, int x, int y){
     if(key=='a' && !player->hurt) {player->dx=-1;player->dy=0;player->state=0;}
     if(key=='d' && !player->hurt) {player->dx=1;player->dy=0;player->state=2;}
