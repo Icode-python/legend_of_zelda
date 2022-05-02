@@ -29,17 +29,17 @@ int dynamicCollision(int x1, int width1, int x2, int width2, int y1, int length1
 int collisionBorder(int x, int y,int width,int length, bool ifChange){
     if(x<0){if(ifChange){worldX-=1;}return 1;}
     if(x+width>=screenWidth){if(ifChange){worldX+=1;}return 1;}
-    if(y<0){if(ifChange){worldY-=1;}return 1;}
+    if(y<0+yOffset){if(ifChange){worldY-=1;}return 1;}
     if(y+length>=screenHeight){if(ifChange){worldY+=1;}return 1;}
     return 0;
 }
 
 
 int scrollMap(entity * e){
-    if(e->x<0){e->x=screenWidth-e->width;return 1;}
+    if(e->x<0){e->x=screenWidth-e->width*1.5;return 1;}
     if(e->x+e->width>=screenWidth){e->x=0+e->width/2;return 1;}
-    if(e->y<0){e->y=screenHeight-e->length;return 1;}
-    if(e->y+e->length>=screenHeight){e->y=0+e->length/2;return 1;}
+    if(e->y<0+yOffset){e->y=screenHeight-e->length*1.5;return 1;}
+    if(e->y+e->length>=screenHeight){e->y=0+e->length/4+yOffset;return 1;}
     return 0;
 }
 

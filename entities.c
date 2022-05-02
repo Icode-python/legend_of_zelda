@@ -6,18 +6,18 @@
 #include <stdbool.h>
 
 void drawWeapon(Weapon * w){
-    glPointSize(1);
+    glPointSize(scale);
     glBegin(GL_POINTS);
     double modColor;
     if(w->changeColor==true){modColor = rand()%75; modColor = modColor/255;}
     else{modColor=0;}
-    for (int y=0;y<w->length;y++){
-        for (int x=0;x<w->width;x++){
+    for (int y=0;y<w->length/scale;y++){
+        for (int x=0;x<w->width/scale;x++){
             int a = y+w->textureCoords[w->state][1];
             int z = x+w->textureCoords[w->state][0];
             if(spriteAtlas[a][z][0] <= 1){
                 glColor3f(spriteAtlas[a][z][0]+modColor,spriteAtlas[a][z][1]+modColor,spriteAtlas[a][z][2]+modColor);
-                glVertex2i(w->x+x,w->y+y);
+                glVertex2i(w->x+x*scale,w->y+y*scale);
             }
         }
     }
@@ -96,18 +96,18 @@ void drawWall(int wallSprite, int x,int y,int xo,int yo, int mapS, int offset){
 }
 
 void drawEntity(entity * e){
-    glPointSize(1);
+    glPointSize(scale);
     glBegin(GL_POINTS);
     double modColor;
     if(e->hurt==true){modColor = rand()%75; modColor = modColor/255;}
     else{modColor=0;}
-    for (int y=0;y<e->length;y++){
-        for (int x=0;x<e->width;x++){
+    for (int y=0;y<e->length/scale;y++){
+        for (int x=0;x<e->width/scale;x++){
             int a = y+e->textureCoords[e->state*2+e->frame][1];
             int z = x+e->textureCoords[e->state*2+e->frame][0];
             if(spriteAtlas[a][z][0] <= 1){
                 glColor3f(spriteAtlas[a][z][0]+modColor,spriteAtlas[a][z][1]+modColor,spriteAtlas[a][z][2]+modColor);
-                glVertex2i(e->x+x,e->y+y);
+                glVertex2i(e->x+x*scale,e->y+y*scale);
             }
         }
     }
@@ -115,14 +115,14 @@ void drawEntity(entity * e){
 }
 
 void drawWorldSprite(int wx, int wy, int textureCoords[2]){
-    glPointSize(1);
+    glPointSize(scale);
     glBegin(GL_POINTS);
-    for (int y=0;y<mapS;y++){
-        for (int x=0;x<mapS;x++){
+    for (int y=0;y<mapS/scale;y++){
+        for (int x=0;x<mapS/scale;x++){
             int a = y+textureCoords[1];
             int z = x+textureCoords[0];
             glColor3f(worldMapTilesSprites[a][z][0],worldMapTilesSprites[a][z][1],worldMapTilesSprites[a][z][2]);
-            glVertex2i(wx+x,wy+y);
+            glVertex2i(wx+x*scale,wy+y*scale);
         }
     }
     glEnd();

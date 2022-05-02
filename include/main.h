@@ -3,6 +3,8 @@
 #include <string.h>
 #include <stdbool.h>
 
+#define scale 4
+
 extern int mapSizeX;extern int mapSizeY;extern int mapS;extern int offset;extern int worldX;extern int worldY;extern int screenWidth; extern int screenHeight; extern int yOffset;
 
 extern long double wall[2][64*64][3];
@@ -11,11 +13,11 @@ extern long double redMoblinTextureCoords[8][2];
 extern long double redOctorockTextureCoords[8][2];
 extern long double swordTextureCoords[4][2];
 long double arrowTextureCoords[4][2];
-extern long double spriteAtlas[192][1536][3];
+extern long double spriteAtlas[48][384][3];
 extern int worldMapBlocking[88][256];
 extern int worldMapTiles[88][256];
 extern int worldMapSpritesTextureCoords[144][2];
-extern long double worldMapTilesSprites[544][1224][3];
+extern long double worldMapTilesSprites[136][306][3];
 int spriteWorldMap[11][16];
 int Dir[4][2];
 

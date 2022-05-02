@@ -18,6 +18,7 @@ void frameTimer(int id){
 void gameEvents(int id){
     for(int y=0;y<mapSizeY;y++){for(int x=0;x<mapSizeX;x++){if(enemies[y][x]->alive && !enemies[y][x]->hurt){walkCycle(enemies[y][x]);}}}
     glutTimerFunc(1000, gameEvents, 0);
+    glutPostRedisplay();
 }
 
 void allocEnemies(){
@@ -76,7 +77,7 @@ void display(){
 
 
 void init(){
-    glClearColor(0.3,0.3,0.3,0);
+    glClearColor(0.1,0.1,0.1,0);
     gluOrtho2D(0,screenWidth,screenHeight,0);
     allocEnemies();
     readMap();
