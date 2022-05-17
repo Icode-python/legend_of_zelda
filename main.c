@@ -82,7 +82,7 @@ void init(){
     allocEnemies();
     readMap();
     player = initEntity(64,64,5*mapS,5*mapS+yOffset,8,0,6,2,playerTextureCoords,1);
-    player->weapon = initWeapon(player,64,64,8,1,true,swordTextureCoords);
+    player->weapon = initWeapon(player,64,64,4,1,true,swordTextureCoords);
     frameTimer(0);
     gameEvents(0);
 }
