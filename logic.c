@@ -98,7 +98,8 @@ void update_enemies(){
                 EntityCollision(enemies[y][x],player);
                 drawEntity(enemies[y][x]);
                 int c = staticCollision(map,enemies[y][x]->x+enemies[y][x]->dx,enemies[y][x]->y+enemies[y][x]->dy,enemies[y][x]->width,enemies[y][x]->length);
-                if(c == 0){
+                int d = collisionBorder(enemies[y][x]->x+enemies[y][x]->dx*enemies[y][x]->speed,enemies[y][x]->y+enemies[y][x]->dy*enemies[y][x]->speed,enemies[y][x]->width,enemies[y][x]->length, false);
+                if(c == 0 && d == 0){
                     enemies[y][x]->x+=enemies[y][x]->dx;enemies[y][x]->y+=enemies[y][x]->dy;
                     glutPostRedisplay();
                 }

@@ -26,7 +26,7 @@ void drawWeapon(Weapon * w){
 }
 
 
-entity * initEntity(int width, int height, int x, int y, int speed, int state, int health, int animMax, long double textureCoords[8][2], int ifWeapon){
+entity * initEntity(int width, int height, int x, int y, int speed, int state, int health, int animMax, float textureCoords[8][2], int ifWeapon){
     entity *e;
     e = (entity *)malloc(sizeof(entity));
     e->x = x; e->y = y;e->animMax=animMax;
@@ -38,7 +38,7 @@ entity * initEntity(int width, int height, int x, int y, int speed, int state, i
     return e;
 }
 
-entity * changeEntity(entity * e, int x, int y, int ox, int oy, int health, long double textureCoords[8][2], bool alive){
+entity * changeEntity(entity * e, int x, int y, int ox, int oy, int health, float textureCoords[8][2], bool alive){
     e->x = x; e->y = y; e->health=health; e->alive=alive; e->ox=ox; e->oy=oy;
     memcpy(e->textureCoords, textureCoords, sizeof(e->textureCoords));
 }
@@ -71,7 +71,7 @@ entity * EntityCollision(entity * e, entity * target){
 }
 
 
-Weapon * initWeapon(entity * ep,int width,int length, int speed, int damage, bool changeColor, long double textureCoords[4][2]){
+Weapon * initWeapon(entity * ep,int width,int length, int speed, int damage, bool changeColor, float textureCoords[4][2]){
     Weapon *e;
     e = (Weapon *)malloc(sizeof(Weapon));
     e->x=ep->x; e->y=ep->y;e->dx=0;e->dy=0;

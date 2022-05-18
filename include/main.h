@@ -7,17 +7,17 @@
 
 extern int mapSizeX;extern int mapSizeY;extern int mapS;extern int offset;extern int worldX;extern int worldY;extern int screenWidth; extern int screenHeight; extern int yOffset;
 
-extern long double wall[2][64*64][3];
-extern long double playerTextureCoords[8][2];
-extern long double redMoblinTextureCoords[8][2];
-extern long double redOctorockTextureCoords[8][2];
-extern long double swordTextureCoords[4][2];
-long double arrowTextureCoords[4][2];
-extern long double spriteAtlas[48][384][3];
+extern float wall[2][64*64][3];
+extern float playerTextureCoords[8][2];
+extern float redMoblinTextureCoords[8][2];
+extern float redOctorockTextureCoords[8][2];
+extern float swordTextureCoords[4][2];
+float arrowTextureCoords[4][2];
+extern float spriteAtlas[48][384][3];
 extern int worldMapBlocking[88][256];
 extern int worldMapTiles[88][256];
 extern int worldMapSpritesTextureCoords[144][2];
-extern long double worldMapTilesSprites[136][306][3];
+extern float worldMapTilesSprites[136][306][3];
 int spriteWorldMap[11][16];
 int Dir[4][2];
 
@@ -36,7 +36,7 @@ typedef struct Weapon{
     bool frame;
     bool used;
     bool changeColor;
-    long double textureCoords[4][2];
+    float textureCoords[4][2];
 } Weapon;
 
 typedef struct Entity{
@@ -54,7 +54,7 @@ typedef struct Entity{
     bool frame;
     bool standing;
     bool alive;
-    long double textureCoords[8][2];
+    float textureCoords[8][2];
     Weapon * weapon;
 } entity;
 
@@ -65,11 +65,11 @@ entity * enemies[11][16];
 void drawWeapon(Weapon * w);
 void drawEntity(entity * entity);
 void drawWall(int wallSprite, int x,int y,int xo,int yo, int mapS, int offset);
-entity * initEntity(int width, int height, int x, int y, int speed, int state, int health, int animMax, long double textureCoords[8][2], int ifWeapon);
-Weapon * initWeapon(entity * ep,int width,int length, int speed, int damage, bool changeColor, long double textureCoords[4][2]);
+entity * initEntity(int width, int height, int x, int y, int speed, int state, int health, int animMax, float textureCoords[8][2], int ifWeapon);
+Weapon * initWeapon(entity * ep,int width,int length, int speed, int damage, bool changeColor, float textureCoords[4][2]);
 entity * walkCycle(entity * e);
 entity * animation(entity * e);
-entity * changeEntity(entity * e, int x, int y, int ox, int oy, int health, long double textureCoords[8][2], bool alive);
+entity * changeEntity(entity * e, int x, int y, int ox, int oy, int health, float textureCoords[8][2], bool alive);
 
 //math
 int staticCollision(int map[11][16], int x1, int y1, int width, int length);
