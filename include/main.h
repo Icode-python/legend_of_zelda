@@ -12,12 +12,14 @@ extern float playerTextureCoords[8][2];
 extern float redMoblinTextureCoords[8][2];
 extern float redOctorockTextureCoords[8][2];
 extern float swordTextureCoords[4][2];
+extern int fontTextureCoords[35][2];
 float arrowTextureCoords[4][2];
 extern float spriteAtlas[48][384][3];
 extern int worldMapBlocking[88][256];
 extern int worldMapTiles[88][256];
 extern int worldMapSpritesTextureCoords[144][2];
 extern float worldMapTilesSprites[136][306][3];
+extern float font[17][257][3];
 int spriteWorldMap[11][16];
 int Dir[4][2];
 
@@ -58,6 +60,12 @@ typedef struct Entity{
     Weapon * weapon;
 } entity;
 
+typedef struct Glyph{
+    int x, y;
+    int width, height;
+    float textureCoords[2];
+} Glyph;
+
 entity * player;
 entity * enemies[11][16];
 
@@ -70,6 +78,7 @@ Weapon * initWeapon(entity * ep,int width,int length, int speed, int damage, boo
 entity * walkCycle(entity * e);
 entity * animation(entity * e);
 entity * changeEntity(entity * e, int x, int y, int ox, int oy, int health, float textureCoords[8][2], bool alive);
+void drawEnemyEntity();
 
 //math
 int staticCollision(int map[11][16], int x1, int y1, int width, int length);
@@ -84,3 +93,4 @@ int scrollMap(entity * e);
 void drawWorldSprite(int x, int y, int textureCoords[2]);
 void drawWorld();
 void update_enemies();
+void allocEnemies();

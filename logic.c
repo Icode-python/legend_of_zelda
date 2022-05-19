@@ -43,71 +43,10 @@ int scrollMap(entity * e){
     return 0;
 }
 
-Weapon * resetWeapon(Weapon * weapon,entity * e){
-    weapon->used=0;
-    weapon->dx=0;weapon->dy=0;
-    weapon->x=e->x+e->width-weapon->width;weapon->y=e->y+e->length-weapon->length;
-    return weapon;
-}
-
-Weapon * updateWeapon(Weapon * weapon, entity * e){
-    if(weapon->used==1){
-        int c = staticCollision(map,weapon->x,weapon->y,weapon->width,weapon->length);
-        int d = collisionBorder(weapon->x,weapon->y,weapon->width/2,weapon->length/2,false);
-        if(c==0 && d==0){
-            drawWeapon(weapon);
-            weapon->x+=weapon->dx; weapon->y+=weapon->dy;
-        }
-        else if(c==1 || d==1){resetWeapon(weapon,e);}
-    }
-    else{
-        weapon->state = e->state;
-        weapon->x=e->x+e->width-weapon->width;weapon->y=e->y+e->length-weapon->length;;
-    }
-    return weapon;
-}
-
-entity * walkCycle(entity * e){
-    srand(rand());
-    int r = rand()%8;
-    if(r>=4){
-        e->dx=0;e->dy=0;e->standing=true;
-        if(e->weapon->used!=1 && r==4){
-            e->weapon->used=1;
-            e->weapon->dx=Dir[e->state][0]*e->weapon->speed;
-            e->weapon->dy=Dir[e->state][1]*e->weapon->speed;
-        }
-    }
-    else{
-        e->state = r;e->standing=false;
-        e->dx = Dir[e->state][0];e->dy = Dir[e->state][1];
-    }
-    return e;
-}
-
 entity * obstacleCollision(entity * e){
     int c = staticCollision(map,e->x+e->dx*e->speed,e->y+e->dy*e->speed,e->width,e->length);
     if(c == 0){e->x+=e->dx*e->speed;e->y+=e->dy*e->speed;}
     else{e->frame=0;e->standing=true;}
-}
-
-void update_enemies(){
-    for(int y=0;y<mapSizeY;y++){
-        for(int x=0;x<mapSizeX;x++){
-            if(enemies[y][x]->alive){
-                EntityCollision(enemies[y][x],player);
-                drawEntity(enemies[y][x]);
-                int c = staticCollision(map,enemies[y][x]->x+enemies[y][x]->dx,enemies[y][x]->y+enemies[y][x]->dy,enemies[y][x]->width,enemies[y][x]->length);
-                int d = collisionBorder(enemies[y][x]->x+enemies[y][x]->dx*enemies[y][x]->speed,enemies[y][x]->y+enemies[y][x]->dy*enemies[y][x]->speed,enemies[y][x]->width,enemies[y][x]->length, false);
-                if(c == 0 && d == 0){
-                    enemies[y][x]->x+=enemies[y][x]->dx;enemies[y][x]->y+=enemies[y][x]->dy;
-                    glutPostRedisplay();
-                }
-                else{enemies[y][x]->standing=true;}
-            }
-            updateWeapon(enemies[y][x]->weapon,enemies[y][x]);
-        }
-    }
 }
 
 void buttons(unsigned char key, int x, int y){

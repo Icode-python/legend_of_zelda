@@ -5,27 +5,6 @@
 #include <string.h>
 #include <stdbool.h>
 
-void drawWeapon(Weapon * w){
-    glPointSize(scale);
-    glBegin(GL_POINTS);
-    double modColor;
-    if(w->changeColor==true){modColor = rand()%75; modColor = modColor/255;}
-    else{modColor=0;}
-    for (int y=0;y<w->length/scale;y++){
-        for (int x=0;x<w->width/scale;x++){
-            int a = y+w->textureCoords[w->state][1];
-            int z = x+w->textureCoords[w->state][0];
-            if(spriteAtlas[a][z][0] <= 1){
-                glColor3f(spriteAtlas[a][z][0]+modColor,spriteAtlas[a][z][1]+modColor,spriteAtlas[a][z][2]+modColor);
-                glVertex2i(w->x+x*scale,w->y+y*scale);
-            }
-        }
-    }
-    glEnd();
-    glutPostRedisplay();
-}
-
-
 entity * initEntity(int width, int height, int x, int y, int speed, int state, int health, int animMax, float textureCoords[8][2], int ifWeapon){
     entity *e;
     e = (entity *)malloc(sizeof(entity));
@@ -36,11 +15,6 @@ entity * initEntity(int width, int height, int x, int y, int speed, int state, i
     e->animTimer=0;
     memcpy(e->textureCoords, textureCoords, sizeof(e->textureCoords));
     return e;
-}
-
-entity * changeEntity(entity * e, int x, int y, int ox, int oy, int health, float textureCoords[8][2], bool alive){
-    e->x = x; e->y = y; e->health=health; e->alive=alive; e->ox=ox; e->oy=oy;
-    memcpy(e->textureCoords, textureCoords, sizeof(e->textureCoords));
 }
 
 entity * animation(entity * e){
@@ -67,18 +41,6 @@ entity * EntityCollision(entity * e, entity * target){
         if(e->health<=0){e->alive=false;worldMapBlocking[e->oy][e->ox]=1;}
         else{e->hurt=true;}
     }
-    return e;
-}
-
-
-Weapon * initWeapon(entity * ep,int width,int length, int speed, int damage, bool changeColor, float textureCoords[4][2]){
-    Weapon *e;
-    e = (Weapon *)malloc(sizeof(Weapon));
-    e->x=ep->x; e->y=ep->y;e->dx=0;e->dy=0;
-    e->width=width; e->length=length;
-    e->used=0;e->state=0;e->speed=speed;
-    e->damage = damage; e->changeColor = changeColor;
-    memcpy(e->textureCoords,textureCoords,sizeof(e->textureCoords));
     return e;
 }
 

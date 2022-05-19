@@ -11,6 +11,7 @@ int Dir[4][2] = {{-1,0},{0,1},{1,0},{0,-1}};
 void frameTimer(int id){
     for(int y=0;y<mapSizeY;y++){for(int x=0;x<mapSizeX;x++){animation(enemies[y][x]);}}
     animation(player);
+    update_enemies();
     player->standing=true;
     glutTimerFunc(100, frameTimer, 0);
 }
@@ -19,16 +20,6 @@ void gameEvents(int id){
     for(int y=0;y<mapSizeY;y++){for(int x=0;x<mapSizeX;x++){if(enemies[y][x]->alive && !enemies[y][x]->hurt){walkCycle(enemies[y][x]);}}}
     glutTimerFunc(1000, gameEvents, 0);
     glutPostRedisplay();
-}
-
-void allocEnemies(){
-    for(int y=0;y<mapSizeY;y++){
-        for(int x=0;x<mapSizeX;x++){
-            enemies[y][x] = initEntity(64,64,x*mapS,y*mapS,1,0,2,1,redOctorockTextureCoords,1);
-            enemies[y][x]->weapon = initWeapon(enemies[y][x],64,64,4,1,false,arrowTextureCoords);
-            enemies[y][x]->alive = false;
-        }
-    }
 }
 
 void readMap(){
@@ -42,6 +33,7 @@ void readMap(){
             else{changeEntity(enemies[y][x],0,0,x,y,1,redOctorockTextureCoords,false);}
         }
     }
+    update_enemies();
     drawWorld();
 }
 
@@ -70,7 +62,7 @@ void drawMap(){
 void display(){
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     drawWorld();
-    update_enemies();
+    drawEnemyEntity();
     updatePlayer(player);
     glutSwapBuffers();
 }
