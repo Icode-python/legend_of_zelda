@@ -12,7 +12,7 @@ extern float playerTextureCoords[8][2];
 extern float redMoblinTextureCoords[8][2];
 extern float redOctorockTextureCoords[8][2];
 extern float swordTextureCoords[4][2];
-extern int fontTextureCoords[35][2];
+extern float fontTextureCoords[36][2];
 float arrowTextureCoords[4][2];
 extern float spriteAtlas[48][384][3];
 extern int worldMapBlocking[88][256];
@@ -62,12 +62,13 @@ typedef struct Entity{
 
 typedef struct Glyph{
     int x, y;
-    int width, height;
+    int width, length;
     float textureCoords[2];
 } Glyph;
 
 entity * player;
 entity * enemies[11][16];
+Glyph * A;
 
 //entity 
 void drawWeapon(Weapon * w);
@@ -94,3 +95,7 @@ void drawWorldSprite(int x, int y, int textureCoords[2]);
 void drawWorld();
 void update_enemies();
 void allocEnemies();
+
+//text
+void drawGlyph(Glyph * g);
+Glyph * initGlyph(int x, int y, int w, int l, float texCoords[2]);

@@ -11,9 +11,13 @@ int Dir[4][2] = {{-1,0},{0,1},{1,0},{0,-1}};
 void frameTimer(int id){
     for(int y=0;y<mapSizeY;y++){for(int x=0;x<mapSizeX;x++){animation(enemies[y][x]);}}
     animation(player);
-    update_enemies();
     player->standing=true;
     glutTimerFunc(100, frameTimer, 0);
+}
+
+void updateEnemyLoop(int id){
+    update_enemies();
+    glutTimerFunc(10, updateEnemyLoop, 0);
 }
 
 void gameEvents(int id){
@@ -33,7 +37,6 @@ void readMap(){
             else{changeEntity(enemies[y][x],0,0,x,y,1,redOctorockTextureCoords,false);}
         }
     }
-    update_enemies();
     drawWorld();
 }
 
@@ -63,6 +66,7 @@ void display(){
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     drawWorld();
     drawEnemyEntity();
+    drawGlyph(A);
     updatePlayer(player);
     glutSwapBuffers();
 }
@@ -72,7 +76,9 @@ void init(){
     glClearColor(0.1,0.1,0.1,0);
     gluOrtho2D(0,screenWidth,screenHeight,0);
     allocEnemies();
+    updateEnemyLoop(0);
     readMap();
+    A = initGlyph(100,50,7,7,fontTextureCoords[0]);
     player = initEntity(64,64,5*mapS,5*mapS+yOffset,8,0,6,2,playerTextureCoords,1);
     player->weapon = initWeapon(player,64,64,4,1,true,swordTextureCoords);
     frameTimer(0);
